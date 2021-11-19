@@ -1,4 +1,4 @@
-var trex, trex_running, trex_collided;
+var trex, trex_running, morreu;
 var ground, invisibleGround, groundImage;
 var nuvem, imagem, grupodenuvens;
 var obs1,obs2,obs3,obs4,obs5,obs6, grupodeobs;
@@ -9,11 +9,13 @@ var JOGAR = 1;
 var ENCERRAR = 0;
 var estado = JOGAR;
 
+var gameover, reset, gameoverimg, resetimg;
+
 
 function preload(){
   trex_running = loadAnimation("trex1.png","trex2.png","trex3.png");
-  trex_collided = loadImage("trex_collided.png");
-  
+  morreu = loadAnimation("trex_collided.png");
+
   groundImage = loadImage("ground2.png");
   
  imagem=loadImage("cloud.png");
@@ -23,6 +25,9 @@ function preload(){
  obs4=loadImage("obstacle4.png");
  obs5=loadImage("obstacle5.png");
  obs6=loadImage("obstacle6.png");
+
+ gameoverimg = loadImage("gameOver.png");
+ resetimg = loadImage("restart.png");
 }
 
 function setup() {
@@ -32,12 +37,21 @@ function setup() {
   //crie um sprite de trex
   trex = createSprite(50,160,20,50);
   trex.addAnimation("running", trex_running);
+  trex.addAnimation("morreu",morreu);
   trex.scale = 0.5;
   
   //crie sprite ground (solo)
   ground = createSprite(200,180,400,20);
   ground.addImage("ground",groundImage);
   ground.x = ground.width /2;
+
+  gameover = createSprite(300,100);
+  gameover.addImage(gameoverimg);
+  gameover.scale = 0.5;
+
+  reset = createSprite(300,140);
+  reset.addImage(resetimg);
+  reset.scale = 0.5;
   
   
   //crie um solo invisível
@@ -54,7 +68,7 @@ function setup() {
   console.log(rand)
 
   trex.setCollider("circle",0,0,40);
-  trex.debug = true;
+  //trex.debug = true;
 
 }
 
@@ -93,7 +107,13 @@ console.log("Estado="+estado);
     }
 
   }else if (estado === ENCERRAR){
+    trex.changeAnimation("morreu",morreu);
+
+    grupodeobs.setLifetimeEach(-1);
+    grupodenuvens.setLifetimeEach(-1);
+
     ground.velocityX = 0;
+    trex.velocityY = 0;
     grupodeobs.setVelocityXEach(0);
     grupodenuvens.setVelocityXEach(0);
   }
