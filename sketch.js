@@ -53,13 +53,18 @@ function setup() {
   var rand =  Math.round(random(1,100))
   console.log(rand)
 
+  trex.setCollider("circle",0,0,40);
+  trex.debug = true;
+
 }
 
 function draw() {
   //definir cor do plano de fundo
   background("#cc9600");
   
-  console.log(trex.y)
+console.log("Estado="+estado);
+
+  //console.log(trex.y)
   
   fill("black");
   text("Pontuação:"+score, 500,40);
